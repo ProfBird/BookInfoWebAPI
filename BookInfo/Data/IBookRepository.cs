@@ -9,7 +9,7 @@ namespace BookInfo.Data
 {
     public interface IBookRepository
     {
-        List<Book> GetAllBooks();
+        List<BookViewModel> GetAllBooks();
         Book GetBookByTitle(string title);
         Book GetBookById(int id);
         List<Book> GetBooksByAuthor(Author author);

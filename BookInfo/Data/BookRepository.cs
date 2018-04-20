@@ -18,9 +18,18 @@ namespace BookInfo.Data
         
         /* Interface method implementations */
 
-        public List<Book> GetAllBooks()
+        public List<BookViewModel> GetAllBooks()
         {
-            return context.Books.ToList();
+            var books = new List<BookViewModel>();
+            Author author;
+            foreach (Book b in context.Books)
+            {
+                author = (from a in context.Authors
+                          where a.Books.Contains(b)
+                          select a).FirstOrDefault();
+                books.Add(new BookViewModel { TheBook = b, TheAuthor = author });
+            }
+            return books;
         }
 
         public Book GetBookByTitle(string title)
