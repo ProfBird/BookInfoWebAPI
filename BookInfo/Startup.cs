@@ -29,6 +29,8 @@ namespace BookInfo
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddTransient<IAuthorRepository, AuthorRepository>();
+            services.AddTransient<IBookRepository, BookRepository>();
             services.AddIdentity<AppUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
