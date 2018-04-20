@@ -20,7 +20,7 @@ namespace BookInfo.Data.Migrations
                 .HasAnnotation("ProductVersion", "2.0.2-rtm-10011")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("BookInfo.Models.ApplicationUser", b =>
+            modelBuilder.Entity("BookInfo.Models.AppUser", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -82,13 +82,9 @@ namespace BookInfo.Data.Migrations
 
                     b.Property<DateTime>("Birthday");
 
-                    b.Property<int?>("BookID");
-
                     b.Property<string>("Name");
 
                     b.HasKey("AuthorID");
-
-                    b.HasIndex("BookID");
 
                     b.ToTable("Authors");
                 });
@@ -98,11 +94,15 @@ namespace BookInfo.Data.Migrations
                     b.Property<int>("BookID")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<int?>("AuthorID");
+
                     b.Property<DateTime>("Date");
 
                     b.Property<string>("Title");
 
                     b.HasKey("BookID");
+
+                    b.HasIndex("AuthorID");
 
                     b.ToTable("Books");
                 });
@@ -235,11 +235,11 @@ namespace BookInfo.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("BookInfo.Models.Author", b =>
+            modelBuilder.Entity("BookInfo.Models.Book", b =>
                 {
-                    b.HasOne("BookInfo.Models.Book")
-                        .WithMany("Authors")
-                        .HasForeignKey("BookID");
+                    b.HasOne("BookInfo.Models.Author")
+                        .WithMany("Books")
+                        .HasForeignKey("AuthorID");
                 });
 
             modelBuilder.Entity("BookInfo.Models.Review", b =>
@@ -248,7 +248,7 @@ namespace BookInfo.Data.Migrations
                         .WithMany("Reviews")
                         .HasForeignKey("BookID");
 
-                    b.HasOne("BookInfo.Models.ApplicationUser", "Member")
+                    b.HasOne("BookInfo.Models.AppUser", "Member")
                         .WithMany()
                         .HasForeignKey("MemberId");
                 });
@@ -263,7 +263,7 @@ namespace BookInfo.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("BookInfo.Models.ApplicationUser")
+                    b.HasOne("BookInfo.Models.AppUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -271,7 +271,7 @@ namespace BookInfo.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("BookInfo.Models.ApplicationUser")
+                    b.HasOne("BookInfo.Models.AppUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -284,7 +284,7 @@ namespace BookInfo.Data.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("BookInfo.Models.ApplicationUser")
+                    b.HasOne("BookInfo.Models.AppUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -292,7 +292,7 @@ namespace BookInfo.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("BookInfo.Models.ApplicationUser")
+                    b.HasOne("BookInfo.Models.AppUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);

@@ -5,10 +5,12 @@ namespace BookInfo.Models
 {
     public class Author
     {
+        private List<Book> books = new List<Book>();
+
         public int AuthorID { get; set; }   // PK
-        // public int BookID { get; set; }     // FK
         public string Name { get; set; }
         public DateTime Birthday { get; set; }
+        public List<Book> Books { get { return books; } }
 
         public override bool Equals(object obj)
         {
@@ -23,7 +25,6 @@ namespace BookInfo.Models
         {
             var hashCode = -1696464566;
             hashCode = hashCode * -1521134295 + AuthorID.GetHashCode();
-            // hashCode = hashCode * -1521134295 + BookID.GetHashCode();
             hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Name);
             hashCode = hashCode * -1521134295 + Birthday.GetHashCode();
             return hashCode;

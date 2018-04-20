@@ -11,8 +11,8 @@ using System;
 namespace BookInfo.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180419230858_BookInfoModels")]
-    partial class BookInfoModels
+    [Migration("20180420000413_AuthorsHaveBooks")]
+    partial class AuthorsHaveBooks
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -83,13 +83,9 @@ namespace BookInfo.Data.Migrations
 
                     b.Property<DateTime>("Birthday");
 
-                    b.Property<int?>("BookID");
-
                     b.Property<string>("Name");
 
                     b.HasKey("AuthorID");
-
-                    b.HasIndex("BookID");
 
                     b.ToTable("Authors");
                 });
@@ -99,11 +95,15 @@ namespace BookInfo.Data.Migrations
                     b.Property<int>("BookID")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<int?>("AuthorID");
+
                     b.Property<DateTime>("Date");
 
                     b.Property<string>("Title");
 
                     b.HasKey("BookID");
+
+                    b.HasIndex("AuthorID");
 
                     b.ToTable("Books");
                 });
@@ -236,11 +236,11 @@ namespace BookInfo.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("BookInfo.Models.Author", b =>
+            modelBuilder.Entity("BookInfo.Models.Book", b =>
                 {
-                    b.HasOne("BookInfo.Models.Book")
-                        .WithMany("Authors")
-                        .HasForeignKey("BookID");
+                    b.HasOne("BookInfo.Models.Author")
+                        .WithMany("Books")
+                        .HasForeignKey("AuthorID");
                 });
 
             modelBuilder.Entity("BookInfo.Models.Review", b =>
