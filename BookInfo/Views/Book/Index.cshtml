@@ -8,8 +8,17 @@
     @:Title: @b.TheBook.Title <br />
     @:Published: @b.TheBook.Date.ToString("yyyy") <br />
     @:Author: @b.TheAuthor.Name <br />
+    <br />
+    foreach(var r in b.TheBook.Reviews)
+    {
+        @:Review: "@r.ReviewText"<br />
+        @:by: @r.Member.FirstName @r.Member.LastName <br />
+        <br />
+    }
 
     <a asp-action="Edit" asp-route-id="@b.TheBook.BookID" class="btn btn-primary">Edit</a>
     <a asp-action="Delete" asp-route-id="@b.TheBook.BookID" class="btn btn-danger">Delete</a>
     <br />
+    <br />
 }
+<br />

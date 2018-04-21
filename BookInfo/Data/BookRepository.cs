@@ -22,7 +22,7 @@ namespace BookInfo.Data
         {
             var books = new List<BookViewModel>();
             Author author;
-            foreach (Book book in context.Books)
+            foreach (Book book in context.Books.Include("Reviews.Member"))
             {
                 author = (from a in context.Authors
                           where a.Books.Any(b => b.BookID == book.BookID)
