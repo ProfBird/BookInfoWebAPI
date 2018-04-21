@@ -22,12 +22,12 @@ namespace BookInfo.Data
         {
             var books = new List<BookViewModel>();
             Author author;
-            foreach (Book b in context.Books)
+            foreach (Book book in context.Books)
             {
                 author = (from a in context.Authors
-                          where a.Books.Contains(b)
-                          select a).FirstOrDefault();
-                books.Add(new BookViewModel { TheBook = b, TheAuthor = author });
+                          where a.Books.Any(b => b.BookID == book.BookID)
+                          select a).FirstOrDefault<Author>();
+                books.Add(new BookViewModel { TheBook = book, TheAuthor = author });
             }
             return books;
         }

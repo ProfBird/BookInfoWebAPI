@@ -1,19 +1,15 @@
-﻿@model List<BookInfo.Models.Book>
+﻿@model List<BookInfo.Models.BookViewModel>
 @{
     ViewData["Title"] = "Book List";
 }
 
 @foreach (var b in Model)
 {
-    @:Title: @b.Title <br />
-    @:Published: @b.Date.ToString("yyyy") <br />
-    @* TODO: fix the author stuff
-        foreach (var a in b.Authors)
-        {
-            @:Author: @a.Name <br />
-        }
-    *@
-    <a asp-action="Edit" asp-route-id="@b.BookID" class="btn btn-primary">Edit</a>
-    <a asp-action="Delete" asp-route-id="@b.BookID" class="btn btn-danger">Delete</a>
+    @:Title: @b.TheBook.Title <br />
+    @:Published: @b.TheBook.Date.ToString("yyyy") <br />
+    @:Author: @b.TheAuthor.Name <br />
+
+    <a asp-action="Edit" asp-route-id="@b.TheBook.BookID" class="btn btn-primary">Edit</a>
+    <a asp-action="Delete" asp-route-id="@b.TheBook.BookID" class="btn btn-danger">Delete</a>
     <br />
 }
