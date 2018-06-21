@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using BookInfo.Data;
 using BookInfo.Models;
 using BookInfo.Services;
+using System.Runtime.InteropServices;
 
 namespace BookInfo
 {
@@ -26,8 +27,25 @@ namespace BookInfo
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            var os = RuntimeInformation.OSArchitecture;
+			if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+			{
+				services.AddDbContext<ApplicationDbContext>(
+					options => options.UseSqlServer(
+                        Configuration.GetConnectionString("SqlServerConnectionString")));
+			}
+			else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+			{
+				services.AddDbContext<ApplicationDbContext>(
+				   options => options.UseSqlite(
+                            Configuration.GetConnectionString("SQLiteConnectionString")));
+			}
+			else
+			{
+				services.AddDbContext<ApplicationDbContext>(
+					options => options.UseMySql(
+						Configuration.GetConnectionString("MySqlConnection")));
+			}
 
             services.AddTransient<IAuthorRepository, AuthorRepository>();
             services.AddTransient<IBookRepository, BookRepository>();
@@ -44,7 +62,13 @@ namespace BookInfo
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            if (env.IsDevelopment())
+			using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
+                context.Database.Migrate();   // If db doesn't exist, creates it. Applies any pending migrations
+            }
+
+			if (env.IsDevelopment())
             {
                 app.UseBrowserLink();
                 app.UseDeveloperExceptionPage();

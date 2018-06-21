@@ -8,18 +8,16 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.Internal;
 using System;
 
-namespace BookInfo.Data.Migrations
+namespace BookInfo.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180419230858_BookInfoModels")]
-    partial class BookInfoModels
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.0.2-rtm-10011")
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "2.0.2-rtm-10011");
 
             modelBuilder.Entity("BookInfo.Models.AppUser", b =>
                 {
@@ -70,8 +68,7 @@ namespace BookInfo.Data.Migrations
 
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
-                        .HasName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+                        .HasName("UserNameIndex");
 
                     b.ToTable("AspNetUsers");
                 });
@@ -83,13 +80,9 @@ namespace BookInfo.Data.Migrations
 
                     b.Property<DateTime>("Birthday");
 
-                    b.Property<int?>("BookID");
-
                     b.Property<string>("Name");
 
                     b.HasKey("AuthorID");
-
-                    b.HasIndex("BookID");
 
                     b.ToTable("Authors");
                 });
@@ -99,11 +92,15 @@ namespace BookInfo.Data.Migrations
                     b.Property<int>("BookID")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<int?>("AuthorID");
+
                     b.Property<DateTime>("Date");
 
                     b.Property<string>("Title");
 
                     b.HasKey("BookID");
+
+                    b.HasIndex("AuthorID");
 
                     b.ToTable("Books");
                 });
@@ -146,8 +143,7 @@ namespace BookInfo.Data.Migrations
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
-                        .HasName("RoleNameIndex")
-                        .HasFilter("[NormalizedName] IS NOT NULL");
+                        .HasName("RoleNameIndex");
 
                     b.ToTable("AspNetRoles");
                 });
@@ -236,11 +232,11 @@ namespace BookInfo.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("BookInfo.Models.Author", b =>
+            modelBuilder.Entity("BookInfo.Models.Book", b =>
                 {
-                    b.HasOne("BookInfo.Models.Book")
-                        .WithMany("Authors")
-                        .HasForeignKey("BookID");
+                    b.HasOne("BookInfo.Models.Author")
+                        .WithMany("Books")
+                        .HasForeignKey("AuthorID");
                 });
 
             modelBuilder.Entity("BookInfo.Models.Review", b =>
