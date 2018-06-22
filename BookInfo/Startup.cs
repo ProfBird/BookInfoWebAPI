@@ -12,6 +12,7 @@ using BookInfo.Data;
 using BookInfo.Models;
 using BookInfo.Services;
 using System.Runtime.InteropServices;
+using Microsoft.AspNetCore.HttpOverrides;
 
 namespace BookInfo
 {
@@ -78,6 +79,12 @@ namespace BookInfo
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
+
 
             app.UseStaticFiles();
 
