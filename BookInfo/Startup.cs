@@ -32,7 +32,7 @@ namespace BookInfo
 			{
 				services.AddDbContext<ApplicationDbContext>(
 					options => options.UseSqlServer(
-                        Configuration.GetConnectionString("SqlServerConnectionString")));
+                        Configuration.GetConnectionString("SqlServerConnection")));
 			}
 			else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
 			{
