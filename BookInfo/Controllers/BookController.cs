@@ -3,10 +3,13 @@ using Microsoft.AspNetCore.Mvc;
 using BookInfo.Data;
 using BookInfo.Models;
 using Microsoft.AspNetCore.Authorization;
+using System.Collections.Generic;
 
 namespace BookInfo.Controllers
 {
     // This class will be instantiated by the MVC framework or by a unit test
+    [Route("api/[Controller]")]
+    [ApiController]
     public class BookController : Controller
     {
         private IBookRepository bookRepo;
@@ -18,34 +21,15 @@ namespace BookInfo.Controllers
 
         /* Action Methods that get info from the database */
 
-      
-        public ViewResult Index()
+        [HttpGet]
+        public ActionResult<IEnumerable<BookViewModel>> GetBooks()
         {
             var books = bookRepo.GetAllBooks();
-            return View(books);
+            return books;
         }
-
-        /*  // TODO: Provide views for these actions
-        public ViewResult AuthorsOfBook(Book book)
-        {
-            return View(bookRepo.GetAuthorsByBook(book));
-        }
-
-        public ViewResult BooksByAuthor(Author author)
-        {
-            return View(bookRepo.GetBooksByAuthor(author));
-        }
-
-        public ViewResult BookByTitle(string title)
-        {
-            return View(bookRepo.GetBookByTitle(title));
-        }
-        */
         
         /* Action methods that modify the database */
-
    
-        [Authorize(Roles ="member")]
         public ViewResult Add()
         {
             return View();
@@ -67,7 +51,7 @@ namespace BookInfo.Controllers
             return RedirectToAction("Index");
         }
 
-        [HttpGet]
+        [HttpPatch]
         public ViewResult Edit (int id)
         {
             return View(bookRepo.GetBookById(id));
